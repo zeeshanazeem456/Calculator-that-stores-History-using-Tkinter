@@ -1,7 +1,9 @@
 import tkinter as tk
 from tkinter.scrolledtext import ScrolledText
 from math import sqrt
+import os
 
+history_file = os.path.join(os.path.dirname(__file__), "history.txt")
 buttons = [
     ["AC","+/-","%","÷"],
     ["7","8","9","x"],
@@ -28,7 +30,7 @@ button_in_one_row = len(buttons[0])
 
 def update_history():
     try:
-        with open("history.txt", "r", encoding="utf-8") as f:
+        with open(history_file, "r", encoding="utf-8") as f:
             history_text = f.read()
     except FileNotFoundError:
         history_text = ""
@@ -39,12 +41,7 @@ def update_history():
     history_label.config(state='disabled')
 
 def write_to_history(calculation):
-    # Append the calculation to the history.txt file
-    with open("history.txt", "a") as f:
-        f.write(calculation + "\n")
-
-def write_to_history(calculation):
-    with open("history.txt", "a", encoding="utf-8") as f:  
+    with open(history_file, "a", encoding="utf-8") as f:  
         f.write(calculation + "\n")
     update_history()
 
@@ -70,7 +67,7 @@ def button_clicked(value):
                 label["text"] = "Error"
                 write_to_history(f"√({current}) = Error")
             else:
-                result = sqrt(current)  # ✅ Use this (or math.sqrt if you imported `math`)
+                result = sqrt(current)  
                 cleaned_result = remove_zero_decimal(result)
                 label["text"] = cleaned_result
                 write_to_history(f"√({current}) = {cleaned_result}")
